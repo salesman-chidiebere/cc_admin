@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
+import { IoMdMenu } from "react-icons/io";
 
 const MainLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
+    console.log("toggled");
+
     setSidebarOpen(!isSidebarOpen);
   };
 
@@ -27,10 +30,9 @@ const MainLayout = () => {
     <div className="h-screen overflow-hidden border-2 border-black w-full">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-[#2B403A] z-50 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 h-full z-50 transition-transform duration-300 ${
+          isSidebarOpen ? "md:w-64" : "md:w-16"
         }`}
-        style={{ width: "250px" }}
       >
         <Sidebar isCollapsed={!isSidebarOpen} toggleSidebar={toggleSidebar} />
       </div>
@@ -38,7 +40,7 @@ const MainLayout = () => {
       {/* Backdrop for Mobile */}
       {isSidebarOpen && window.innerWidth <= 768 && (
         <div
-          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-30 z-40"
+          className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-30 z-20`}
           onClick={toggleSidebar}
         ></div>
       )}
@@ -46,7 +48,7 @@ const MainLayout = () => {
       {/* Main Content */}
       <div
         className={`flex-1 flex flex-col bg-gray-50 transition-all duration-300 ${
-          isSidebarOpen ? "ml-[250px]" : "ml-0"
+          isSidebarOpen ? "md:ml-[250px]" : "md:ml-16"
         }`}
       >
         {/* Top Bar */}
@@ -54,6 +56,12 @@ const MainLayout = () => {
           <div className="flex flex-1 items-center justify-between">
             {/* Greeting Section */}
             <div className="flex items-center">
+              <button
+                className="md:hidden mr-2 text-primary relative z-50"
+                onClick={toggleSidebar}
+              >
+                <IoMdMenu className="text-xl" />
+              </button>
               <h1 className="text-lg font-bold text-gray-800">
                 Good Morning, Walgreens
               </h1>

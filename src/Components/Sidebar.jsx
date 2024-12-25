@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
+import { IoMdClose } from "react-icons/io";
 import logo from "../assets/images/cc_logo.png";
 
 import homeIcon from "../assets/svg/sidebar/home.svg";
@@ -25,10 +25,10 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: "Home", icon: homeIcon, path:"/app"},
-    { name: "Sales", icon: salesIcon, path:"sales"},
-    { name: "Orders", icon: ordersIcon, path:"orders" },
-    { name: "Customer", icon: customerIcon, path:"customer" },
+    { name: "Home", icon: homeIcon, path: "/app" },
+    { name: "Sales", icon: salesIcon, path: "sales" },
+    { name: "Orders", icon: ordersIcon, path: "orders" },
+    { name: "Customer", icon: customerIcon, path: "customer" },
     { name: "Packages", icon: packagesIcon },
     { name: "Inventory", icon: inventoryIcon },
     // { name: "Services", icon: servicesIcon },
@@ -40,7 +40,10 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   ];
 
   const handleClickOutside = (event) => {
-    if (!event.target.closest(".profile-popup") && !event.target.closest(".footer-section")) {
+    if (
+      !event.target.closest(".profile-popup") &&
+      !event.target.closest(".footer-section")
+    ) {
       setShowProfileMenu(false);
     }
   };
@@ -56,30 +59,43 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
     };
   }, [showProfileMenu]);
 
-  const handleNavigation =() =>{
-    setActiveItem(item.path); 
-    (menuItems.name.toLowerCase === "home")
-    ? navigate(`/app`)
-    : navigate(`${item.name.toLowerCase()}`); 
-  };
-
   return (
     <div
-      className={`h-screen bg-[#3b65ff] text-white flex flex-col transition-all duration-300 m-0 p-0 ${
-        isCollapsed ? "w-16" : "w-64"
+      className={`h-screen top-0 left-0 fixed z-50 md:static bg-[#3b65ff] text-white flex flex-col transition-all duration-300 m-0 p-0 ${
+        isCollapsed
+          ? "w-0 -translate-x-full md:translate-x-0 md:w-16"
+          : "w-[95%] md:w-64"
       }`}
     >
       {/* Toggle Icon */}
       <div
-        className="absolute top-5 -right-4 bg-[#3b65ff] text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer shadow-lg hover:bg-gray-400"
+        className="hidden absolute top-5 -right-4 bg-[#3b65ff] text-white rounded-full w-8 h-8 md:flex items-center justify-center cursor-pointer shadow-lg hover:bg-gray-400"
         onClick={toggleSidebar}
       >
-        <i className={`fas ${isCollapsed ? "fa-chevron-right" : "fa-chevron-left"}`}></i>
+        <i
+          className={`fas ${
+            isCollapsed ? "fa-chevron-right" : "fa-chevron-left"
+          }`}
+        ></i>
       </div>
+
+      {/* Side bar close button for mobile */}
+      <button
+        className={`md:hidden absolute right-2 top-2 text-white ${
+          isCollapsed ? "hidden" : "inline-block"
+        }`}
+        onClick={toggleSidebar}
+      >
+        <IoMdClose className="text-2xl" />
+      </button>
 
       {/* Header Section */}
       <div className={`flex items-center p-4 ${isCollapsed ? "mb-2" : "mb-6"}`}>
-        <div className={`flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
+        <div
+          className={`flex items-center ${
+            isCollapsed ? "justify-center" : "gap-2"
+          }`}
+        >
           <img src={logo} alt="Logo" className="h-8" />
           {!isCollapsed && <h1 className="text-xl font-bold">ChangeCollect</h1>}
         </div>
@@ -90,23 +106,36 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
         {menuItems.map((item, index) => (
           <div
             key={index}
-            onClick={() => { 
-              setActiveItem(item.path); 
-              navigate(item.path)
+            onClick={() => {
+              setActiveItem(item.path);
+              navigate(item.path);
             }}
             className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-colors duration-300 ${
-              activeItem === item.path ? " text-white" : "hover:bg-traparent text-gray-400"
+              activeItem === item.path
+                ? " text-white"
+                : "hover:bg-traparent text-gray-400"
             } ${isCollapsed ? "justify-center" : ""}`}
+            title={item.name}
           >
             <img
               src={item.icon}
               alt={`${item.name} Icon`}
-              className={`h-5 w-5 ${activeItem === item.path ? "text-white" : "text-gray-400"}`}
+              className={`h-5 w-5 ${
+                activeItem === item.path ? "text-white" : "text-gray-400"
+              }`}
             />
             {!isCollapsed && (
-              <span className={`ml-3 text-sm ${activeItem === item.path ? "text-white" : "text-gray-400"}`}>{item.name}</span>
+              <span
+                className={`ml-3 text-sm ${
+                  activeItem === item.path ? "text-white" : "text-gray-400"
+                }`}
+              >
+                {item.name}
+              </span>
             )}
-            {!isCollapsed && <i className="fas fa-chevron-right ml-auto ${activeItem === item.name ? 'text-white' : 'text-gray-400'}"></i>}
+            {!isCollapsed && (
+              <i className="fas fa-chevron-right ml-auto ${activeItem === item.name ? 'text-white' : 'text-gray-400'}"></i>
+            )}
           </div>
         ))}
       </div>
@@ -114,7 +143,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
       {/* Footer Section */}
       <div className="relative footer-section bg-darkGreen">
         <div
-          className={`flex items-center gap-2 px-2 py-1 rounded-full border border-white transition-all duration-300 m-3 cursor-pointer ${
+          className={`hidden md:flex items-center gap-2 px-2 py-1 rounded-full border border-white transition-all duration-300 m-3 cursor-pointer ${
             isCollapsed ? "justify-center" : ""
           }`}
           onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -147,7 +176,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
         {/* Profile Menu Popup */}
         {showProfileMenu && (
           <div
-          className="absolute bottom-16 left-1/2 transform -translate-x-1/2
+            className="absolute bottom-16 left-1/2 transform -translate-x-1/2
                    bg-white text-black rounded-lg shadow-lg overflow-hidden cursor-pointer w-[230px]"
           >
             <div className="flex flex-col">
@@ -172,8 +201,29 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
             </div>
           </div>
         )}
+        <div className="md:hidden flex flex-col gap-3">
+          <div
+            className="flex items-center gap-2 p-3 hover:opacity-85 cursor-pointer"
+            onClick={() => navigate("profile")}
+            title="Profile"
+          >
+            <i className="fas fa-user"></i>
+            <p className={`${isCollapsed ? "hidden" : "inline-block"}`}>
+              View Profile
+            </p>
+          </div>
+          <div
+            className="flex items-center gap-2 p-3 hover:opacity-85 cursor-pointer"
+            onClick={() => navigate("/")}
+            title="Sign Out"
+          >
+            <i className="fas fa-sign-out-alt"></i>
+            <p className={`${isCollapsed ? "hidden" : "inline-block"}`}>
+              Sign Out
+            </p>
+          </div>
+        </div>
       </div>
-
     </div>
   );
 };
