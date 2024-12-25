@@ -24,7 +24,7 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden border-2 border-black w-full">
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-[#2B403A] z-50 transition-transform duration-300 ${
@@ -50,8 +50,8 @@ const MainLayout = () => {
         }`}
       >
         {/* Top Bar */}
-        <div className="sticky top-0 left-0 right-0 bg-white shadow-md z-10 px-6 py-4">
-          <div className="flex items-center justify-between">
+        <div className="sticky top-0 left-0 right-0 bg-white shadow-md z-10 h-[80px] flex items-center px-6">
+          <div className="flex flex-1 items-center justify-between">
             {/* Greeting Section */}
             <div className="flex items-center">
               <h1 className="text-lg font-bold text-gray-800">
@@ -74,7 +74,7 @@ const MainLayout = () => {
         </div>
 
         {/* Dynamic Content */}
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-6 min min-h-[calc(100vh-80px)]">
           <Outlet />
         </div>
       </div>
